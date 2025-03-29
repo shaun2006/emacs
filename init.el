@@ -49,23 +49,26 @@
 
 
 ;;EMACS X WINDOW MANAGER
-(use-package exwm)
-(require 'exwm)
-(require 'exwm-config)
-(exwm-config-default)
-(require 'exwm-randr)
+;(use-package exwm)
+;(require 'exwm)
+;(require 'exwm-config)
+;(exwm-config-default)
+;(require 'exwm-randr)
 ;;(setq exwn-randr-workspace-output-plist (0) DisplayPort-0" 1 "DisplayPort-1" 2 "HEMI-A-01))
-(setq exwm-randr-workspace-output-plist '(0 "HDMI-1"))
-(add-hook 'exwm-randr-screen-change-hook
-	  (lambda ()
-	    (start-process-shell-command
+;(setq exwm-randr-workspace-output-plist '(0 "HDMI-1"))
+;(add-hook 'exwm-randr-screen-change-hook
+;	  (lambda ()
+;	    (start-process-shell-command
 ;;"xrandr" nil "xrandr -output DisplayPort-0-mode 1920x1080-pos 0x0-rotate normal-output DisplayPort-1-primary-mode 1920x1080-po 1920x0 -rotate normal output HDMI-A-0-mode 1920x1080-pos 3840x0-rotate normal")))
-	     "xrandr" nil "xrandr --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal")))
-(exwm-randr-enable)
-(require 'exwm-systemtray)
-(exwm-systemtray-enable)
+;	     "xrandr" nil "xrandr --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal")))
+;(exwm-randr-enable)
+;(require 'exwm-systemtray)
+;(exwm-systemtray-enable)
 ;;Some functionality uses this to identify you, e.g. GPG configuration, etail
 ;;clients, file templates and snippets.
+;;(setq user-full-name "username"
+;;      user-mail-address "emai")
+
 
 
 (use-package command-log-mode)
@@ -401,7 +404,7 @@
 
 ;;(shell-command "picom &")
 ;;emacs --eval '(picom &)' \
-(call-process "/bin/bash" "~/.config/xmonad/scripts/bg.sh")
+;;(call-process "/bin/bash" "~/.config/xmonad/scripts/bg.sh")
 
 
 
