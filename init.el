@@ -5,9 +5,14 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (set-fringe-mode 10) ; gives some breating room
-;;(set-frame-font "Times New Roman 14" nil t) ; setup emacs font
+;;(set-frame-font "Inconsolata 59" nil t)
+;;(Set-frame-font "Times New Roman 14" nil t) ; setup emacs font
 ;; remove the side browders
 (set-fringe-mode 0)
+
+(set-frame-parameter nil 'alpha-background 90) ; For current frame
+(add-to-list 'default-frame-alist '(alpha-background . 90)) ; For all new frames henceforth
+
 
 ;; shows time 
 (setq display-time-format "%I:%M:%S")
@@ -17,9 +22,6 @@
 ;; Display line numbers in every buffer
 (global-display-line-numbers-mode 1)
 
-;; Load the emacs default theme
-;;(load-theme 'deeper-blue t)
-;;(load-theme 'tango-dark t)
 
 (defun close-all-buffers ()
 (interactive)
@@ -32,8 +34,7 @@
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
-                         ("elpa"
-                         . "https://elpa.gnu.org/packages/")))
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
 
 
 (package-initialize)
@@ -46,29 +47,6 @@
 
 (require 'use-package)
 (setq use-package-always-ensure t)
-
-
-;;EMACS X WINDOW MANAGER
-;(use-package exwm)
-;(require 'exwm)
-;(require 'exwm-config)
-;(exwm-config-default)
-;(require 'exwm-randr)
-;;(setq exwn-randr-workspace-output-plist (0) DisplayPort-0" 1 "DisplayPort-1" 2 "HEMI-A-01))
-;(setq exwm-randr-workspace-output-plist '(0 "HDMI-1"))
-;(add-hook 'exwm-randr-screen-change-hook
-;	  (lambda ()
-;	    (start-process-shell-command
-;;"xrandr" nil "xrandr -output DisplayPort-0-mode 1920x1080-pos 0x0-rotate normal-output DisplayPort-1-primary-mode 1920x1080-po 1920x0 -rotate normal output HDMI-A-0-mode 1920x1080-pos 3840x0-rotate normal")))
-;	     "xrandr" nil "xrandr --output HDMI-1 --mode 1920x1080 --pos 0x0 --rotate normal")))
-;(exwm-randr-enable)
-;(require 'exwm-systemtray)
-;(exwm-systemtray-enable)
-;;Some functionality uses this to identify you, e.g. GPG configuration, etail
-;;clients, file templates and snippets.
-;;(setq user-full-name "username"
-;;      user-mail-address "emai")
-
 
 
 (use-package command-log-mode)
@@ -118,14 +96,6 @@
   :diminish which-key-mode
   :config
   (setq which-key-idle-delay 0.1))
-
-
-;; gives code hints
-;;(use-package company
-;;  :ensure t
-;;  :config
- ;; (progn
-;;    (add-hook 'after-init-hook 'global-company-mode)))
 
 
 
@@ -187,6 +157,7 @@
   (doom-themes-visual-bell-config)
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
+  (setq doom-themes-neotree-file-icons t)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-badger") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
@@ -203,13 +174,14 @@
 
 ;; show the tree view
 (use-package neotree)
-
+(global-set-key [f8] 'neotree-toggle)
+(setq neo-theme (if (display-graphic-p)  'icons  'arrow))
 
 ;; use key bindings
 (use-package general)
   (general-define-key
-   "C-M-j" 'counsel-switch-buffer
-   "C-x C-r" 'recently-show)
+   "C-M-j" 'counsel-switch-buffer)
+;;   "C-x C-r" 'recently-show)
 
 
 ;; Haskell packages
@@ -228,7 +200,7 @@
 
 ;; html ide
 
-;; code hints
+;; code hints lsp servers
 (use-package eglot
   :ensure t
   :config
@@ -300,7 +272,25 @@
 (use-package nhexl-mode)
 
 ;; recentf stuff
-(recently-mode 1)
+(require 'recentf)
+
+;; get rid of `find-file-read-only' and replace it with something
+;; more useful.
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+;; enable recent files mode.
+(recentf-mode t)
+
+; 50 files ought to be enough.
+(setq recentf-max-saved-items 50)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+;;(recently-mode 1)
 
 
 
@@ -329,15 +319,15 @@
 	    (add-to-list 'TeX-command-list '("XeLaTeX" "%`xelatex%(mode)%' %t" TeX-run-TeX nil t))
             (setq TeX-command-default "LaTeX")
             (setq TeX-save-query nil)
-            (setq TeX-view-program-selection '((output-pdf "Okular")
-                                                 (output-dvi "Okular")))))
+            (setq TeX-view-program-selection '((output-pdf "Sioyek")
+                                                 (output-dvi "Sioyek")))))
 
 
 
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
+;;(use-package yasnippet
+;; :ensure t
+;;  :config
+;;  (yas-global-mode 1))
 
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
@@ -357,7 +347,7 @@
 ;; json edit
 (use-package json-mode)
 
-(use-package magit)
+;;(use-package magit)
 
 
  ;; Configure Elfeed
@@ -386,25 +376,8 @@
       '("https://archive.nytimes.com/www.nytimes.com/services/xml/rss/index.html" The New York Times)
       )
 
-(use-package pacmacs)
 
 
-(use-package dmenu)
-(use-package evil)
-(use-package exwm-firefox-core)
-(use-package exwm-firefox-evil)
-(require 'exwm-firefox-evil)
-;; Auto enable exwm-firefox-evil-mode on all firefox buffers
-(add-hook 'exwm-manage-finish-hook 'exwm-firefox-evil-activate-if-firefox)
-
-(dolist (k `(
-	     escape
-	     ))
-  (cl-pushnew k exwm-input-prefix-keys))
-
-;;(shell-command "picom &")
-;;emacs --eval '(picom &)' \
-;;(call-process "/bin/bash" "~/.config/xmonad/scripts/bg.sh")
 
 
 
@@ -413,17 +386,37 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(custom-safe-themes
-   '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8" "ce4234c32262924c1d2f43e6b61312634938777071f1129c7cde3ebd4a3028da" "ae426fc51c58ade49774264c17e666ea7f681d8cae62570630539be3d06fd964" "60ada0ff6b91687f1a04cc17ad04119e59a7542644c7c59fc135909499400ab8" "7e377879cbd60c66b88e51fad480b3ab18d60847f31c435f15f5df18bdb18184" "c865644bfc16c7a43e847828139b74d1117a6077a845d16e71da38c8413a5aaa" "570263442ce6735821600ec74a9b032bc5512ed4539faf61168f2fdf747e0668" "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb" "443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294" "f053f92735d6d238461da8512b9c071a5ce3b9d972501f7a5e6682a90bf29725" default))
+   '("aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
+     "ce4234c32262924c1d2f43e6b61312634938777071f1129c7cde3ebd4a3028da"
+     "ae426fc51c58ade49774264c17e666ea7f681d8cae62570630539be3d06fd964"
+     "60ada0ff6b91687f1a04cc17ad04119e59a7542644c7c59fc135909499400ab8"
+     "7e377879cbd60c66b88e51fad480b3ab18d60847f31c435f15f5df18bdb18184"
+     "c865644bfc16c7a43e847828139b74d1117a6077a845d16e71da38c8413a5aaa"
+     "570263442ce6735821600ec74a9b032bc5512ed4539faf61168f2fdf747e0668"
+     "adaf421037f4ae6725aa9f5654a2ed49e2cd2765f71e19a7d26a454491b486eb"
+     "443e2c3c4dd44510f0ea8247b438e834188dc1c6fb80785d83ad3628eadf9294"
+     "f053f92735d6d238461da8512b9c071a5ce3b9d972501f7a5e6682a90bf29725"
+     default))
+ '(display-time-mode t)
+ '(global-display-line-numbers-mode t)
+ '(menu-bar-mode nil)
  '(package-selected-packages
-   '(evil exwm-firefox-evil dmenu shrink-whitespace pacmacs eglot flycheck-aspell elfeed magit autobookmarks sync-recentf recently json-mode json-ls org-noter-pdftools org-pdfview nhexl-mode minimap org-roam lsp-pyright anaconda-mode ac-haskell-process auto-complete ghci-completion company-ghci company-ghc company-backends haskell-mode general all-the-icons neotree doom-themes helpful ivy-rich counsel company which-key rainbow-delimiters doom-modeline ivy command-log-mode use-package))
+   '(all-the-icons auctex ccls command-log-mode company-box counsel
+		   doom-modeline doom-themes elfeed envrc
+		   flycheck-aspell general haskell-mode helpful
+		   ivy-rich json-mode lsp-pyright lsp-ui minimap
+		   neotree nhexl-mode org-roam rainbow-delimiters
+		   undo-tree with-editor))
+ '(tool-bar-mode nil)
  '(warning-suppress-log-types '((server))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "Tahoma" :foundry "MS  " :slant normal :weight regular :height 143 :width normal)))))
 (put 'upcase-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)
 (put 'downcase-region 'disabled nil)
