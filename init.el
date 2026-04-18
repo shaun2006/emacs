@@ -21,6 +21,8 @@
 
 ;; Display line numbers in every buffer
 (global-display-line-numbers-mode 1)
+;; Display relative line numbers
+(setq display-line-numbers-type 'relative)
 
 
 (defun close-all-buffers ()
@@ -347,7 +349,9 @@
 ;; json edit
 (use-package json-mode)
 
-;;(use-package magit)
+(use-package magit
+  :ensure t
+  )
 
 
  ;; Configure Elfeed
@@ -376,7 +380,7 @@
       '("https://archive.nytimes.com/www.nytimes.com/services/xml/rss/index.html" The New York Times)
       )
 
-
+(electric-indent-mode 1)
 
 
 
