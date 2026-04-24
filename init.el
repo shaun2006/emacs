@@ -371,8 +371,7 @@
 
 (bind-key "C-c s" #'ispell-buffer)
 
-
-
+(use-package multiple-cursors-mode)
 
 (use-package elfeed)
 
